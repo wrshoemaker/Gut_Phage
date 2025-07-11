@@ -46,6 +46,8 @@ sample_metagenome_dict = data_utils.read_sample_metadata()
 mgv_uhgv_species_dict = data_utils.parse_mgv_uhgv_species()
 
 
+diptest_path = "%sdiptest.txt" % (config.data_directory)
+
 #file_directory = '%scomplete_minimap2/' % config.data_directory
 div_dict_path_template = config.data_directory + 'divergence_dict_all/%s.pickle'
 #div_dict_directory = '%sdivergence_dict_all/' % config.data_directory
@@ -1574,6 +1576,74 @@ def syn_div_nonsyn_ratio_dip_test(min_n_muts=50, min_n_sites=1e3, min_n_pairs=50
 
 
 
+def save_diptest_values(min_n_muts=50, min_n_sites=1e3, min_n_pairs=500, rescaled_log=True):
+    
+    votu_all = data_utils.get_single_votus()
+
+    lifestyle_all = []
+    ds_diptest_all = []
+    dnds_diptest_all = []
+    votu_score_all = []
+    
+    votu_all_final = []
+    
+    for votu in votu_all:
+        
+        if (votu not in mgv_uhgv_species_dict) or (votu not in uhgv_votu_metadata_dict):
+            continue
+        
+        votu_score = float(mgv_uhgv_species_dict[votu]['avg_temperate_complete'])
+        lifestyle = uhgv_votu_metadata_dict[votu]['lifestyle']
+   
+        if votu_score < 0:
+            continue
+
+        # get data
+        cumulative_n_syn_all, cumulative_n_nonsyn_all, cumulative_block_len_syn_all, cumulative_block_len_nonsyn_all = calculate_syn_div_and_nonsyn_ratio(votu, min_n_muts=min_n_muts, min_n_sites=min_n_sites, check_metadata=True)
+
+        if len(cumulative_n_syn_all) < min_n_pairs:
+            continue
+
+        ds_all = cumulative_n_syn_all/cumulative_block_len_syn_all
+        dn_all = cumulative_n_nonsyn_all/cumulative_block_len_nonsyn_all
+        dnds_all = dn_all/ds_all
+        
+        if rescaled_log == True:
+
+            ds_all = numpy.log10(ds_all)
+            dnds_all = numpy.log10(dnds_all)
+
+            ds_all = (ds_all - numpy.mean(ds_all))/numpy.std(ds_all)
+            dnds_all = (dnds_all - numpy.mean(dnds_all))/numpy.std(dnds_all)
+            
+        ds_diptest = diptest.dipstat(ds_all)
+        dnds_diptest = diptest.dipstat(dnds_all)
+
+
+        votu_all_final.append(votu)
+        lifestyle_all.append(lifestyle)
+        votu_score_all.append(votu_score)
+        ds_diptest_all.append(ds_diptest)
+        dnds_diptest_all.append(dnds_diptest)
+        
+    
+    diptest_file = open(diptest_path, 'w')
+    diptest_file.write('votu\tlifestyle\tavg_temperate_complete\tdiptest_ds\tdiptest_dnds\n')
+
+    for votu_i_idx, votu_i in enumerate(votu_all_final):
+        
+        line_i = [votu_i, lifestyle_all[votu_i_idx], str(votu_score_all[votu_i_idx]), str(ds_diptest_all[votu_i_idx]), str(dnds_diptest_all[votu_i_idx])]        
+        diptest_file.write('\t'.join(line_i) + '\n')
+        
+        
+        
+    diptest_file.close()
+
+    
+
+
+
+
 if __name__ == "__main__":
 
     votu_all = data_utils.get_single_votus()
@@ -1587,9 +1657,11 @@ if __name__ == "__main__":
     #calculate_divergence_alignment(votu)
     #plot_ds_vs_dnds_dist_axis(votu)
     
-    for votu in votu_all:
+    save_diptest_values()
+    
+    #for votu in votu_all:
         
-        plot_ds_vs_dnds_dist_axis(votu)
+    #    plot_ds_vs_dnds_dist_axis(votu)
         
     #    calculate_divergence_alignment(votu)
     
