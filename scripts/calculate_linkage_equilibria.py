@@ -205,6 +205,15 @@ def build_le_counts_dict(votu, max_fraction_nan=0.05, max_d=1e3):
 
                 for f0 in f0s:
                     rsquared_numerators, rsquared_denominators = calculate_LE(n_obs, f0)
+                    rsquared_numerators = rsquared_numerators[0]
+                    rsquared_denominators = rsquared_denominators[0]
+
+                    if numpy.isnan(rsquared_numerators) or numpy.isnan(rsquared_denominators):
+                        continue
+
+                    #if numpy.isnan(rsquared_numerators) 
+
+                    #print(numpy.isnan(rsquared_numerators), ld_count_dict['data']['all'][dist_12][f0]['rsquared_numerators'])
                     #if rsquared_numerators[0] != 0:
                     #    print(f0, n_obs, rsquared_numerators)
                     ld_count_dict['data']['all'][dist_12][f0]['rsquared_numerators'] += rsquared_numerators
@@ -252,6 +261,13 @@ def build_le_counts_dict(votu, max_fraction_nan=0.05, max_d=1e3):
                     
                     for f0 in f0s:
                         rsquared_numerators, rsquared_denominators = calculate_LE(n_var_obs, f0)
+
+                        rsquared_numerators = rsquared_numerators[0]
+                        rsquared_denominators = rsquared_denominators[0]
+
+                        if numpy.isnan(rsquared_numerators) or numpy.isnan(rsquared_denominators):
+                            continue
+
                         ld_count_dict['data'][variant_type][dist_12][f0]['rsquared_numerators'] += rsquared_numerators
                         ld_count_dict['data'][variant_type][dist_12][f0]['rsquared_denominators'] += rsquared_denominators
                         ld_count_dict['data'][variant_type][dist_12][f0]['n_site_pairs'] += 1
