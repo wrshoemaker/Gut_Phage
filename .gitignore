@@ -21,3 +21,5 @@ analysis/ds_vs_dnds_dist_axis_alignment/
 data/allele_counts_map_all.zip
 data/ld_counts_dict_all.zip
 data/divergence_dict_alignment_all.zip
+data/syn_sites_dict_all.zip
+data/uhgv_mgv_otu_fna.zip

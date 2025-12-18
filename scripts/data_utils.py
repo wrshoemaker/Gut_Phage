@@ -1996,6 +1996,8 @@ def filter_allele_counts_map(allele_counts_map, max_fraction_nan=0, min_sample_s
 if __name__ == "__main__":
 
     votu = 'vOTU-000001'
+
+    parse_annotation_table()
     
     #make_syn_sites_votu_dict_from_alignment(votu)
     #build_allele_counts_map(votu)
@@ -2005,6 +2007,8 @@ if __name__ == "__main__":
     votu_all = get_single_votus()
 
     for votu in votu_all:
+
+        continue
                 
         #print(votu)
         

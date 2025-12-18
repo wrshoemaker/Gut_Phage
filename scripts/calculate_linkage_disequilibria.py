@@ -60,7 +60,7 @@ def build_ld_counts_dict(votu, max_fraction_nan=0.05, max_d=1e3):
         
         #for site_pair_idx, site_pair in enumerate(sites_final_pairs):
         n_pairs_processed = 0
-        n_pairs_processed_var = 0
+        #n_pairs_processed_var = 0
         for site_1_idx in range(len(sites_final)):
             
             for site_2_idx in range(site_1_idx):
