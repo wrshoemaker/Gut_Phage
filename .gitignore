@@ -23,3 +23,5 @@ data/ld_counts_dict_all.zip
 data/divergence_dict_alignment_all.zip
 data/syn_sites_dict_all.zip
 data/uhgv_mgv_otu_fna.zip
+data/le_counts_dict_all.zip
+data/le_counts_dict_all/

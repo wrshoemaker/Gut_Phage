@@ -19,7 +19,7 @@ numpy.random.seed(123456789)
 random.seed(123456789)
 
 # just changing the file name
-ld_counts_dict_path = config.data_directory + 'le_counts_dict_all/%s.pkl'
+le_counts_dict_path = config.data_directory + 'le_counts_dict_all/%s.pkl'
 
 min_sample_size = config.between_host_min_sample_size
 min_ld_sample_size = config.between_host_ld_min_sample_size
@@ -131,7 +131,7 @@ def build_le_counts_dict(votu, max_fraction_nan=0.05, max_d=1e3):
         sites_final.sort()
         
         
-        sys.stderr.write("Calculating LD for...\n")
+        sys.stderr.write("Calculating LE for...\n")
         
         ld_count_dict = {}
         ld_count_dict['data'] = {}
@@ -278,8 +278,8 @@ def build_le_counts_dict(votu, max_fraction_nan=0.05, max_d=1e3):
 
 
         sys.stderr.write("Saving dictionary....\n")
-        ld_counts_dict_path_ = ld_counts_dict_path % votu
-        with open(ld_counts_dict_path_, 'wb') as f:
+        le_counts_dict_path_ = le_counts_dict_path % votu
+        with open(le_counts_dict_path_, 'wb') as f:
             pickle.dump(ld_count_dict, f)
         sys.stderr.write("Done!\n")
 
